@@ -1,0 +1,10 @@
+{
+    "host": "127.0.0.1",
+    "port": 8080,
+    "cert_directory": "certs",
+    "ca_common_name": "MyProxy Root CA",
+    "ca_organization": "MyProxy CA",
+    "key_size": 2048,
+    "ca_expiry_days": 3650,
+    "cert_expiry_days": 365
+}
