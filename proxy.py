@@ -1,8 +1,13 @@
 from cert import *
+<<<<<<< HEAD
 from gui import ProxyGUI
 from collections import deque
 import re
 import threading
+=======
+from adblock import EasyListParser
+import re
+>>>>>>> b2d7ad00ddfa5c124555eed2c4fb4f48826050f9
 
 # Logging setup
 logging.basicConfig(level=logging.DEBUG)
@@ -11,16 +16,22 @@ logging.basicConfig(level=logging.DEBUG)
 NOT_ALLOWED = b"HTTP/1.1 405 Method Not Allowed\r\n\r\n"
 CONNECTION_ESTABLISHED = b"HTTP/1.1 200 Connection Established\r\n\r\n"
 
+<<<<<<< HEAD
 CLIENT_TO_SERVER = True
 SERVER_TO_CLIENT = False
+=======
+>>>>>>> b2d7ad00ddfa5c124555eed2c4fb4f48826050f9
 
 class AsyncProxy:
     def __init__(self, host: str = "127.0.0.1", port: int = 8080):
         self.host = host
         self.port = port
         self.cert_handler = CertHandler()
+<<<<<<< HEAD
         self.traffic_log = deque(maxlen=1000)
         self.gui = ProxyGUI(start_proxy_fn=self.start_background)
+=======
+>>>>>>> b2d7ad00ddfa5c124555eed2c4fb4f48826050f9
 
     async def initialize(self):
         """Initialize the proxy server."""
@@ -80,8 +91,13 @@ class AsyncProxy:
             
             # Forward data between the client and the target server
             forward_tasks = [
+<<<<<<< HEAD
                 asyncio.create_task(self._forward_data(reader, target_writer, direction=CLIENT_TO_SERVER)),
                 asyncio.create_task(self._forward_data(target_reader, writer, direction=SERVER_TO_CLIENT))
+=======
+                asyncio.create_task(self._forward_data(reader, target_writer)),
+                asyncio.create_task(self._forward_data(target_reader, writer))
+>>>>>>> b2d7ad00ddfa5c124555eed2c4fb4f48826050f9
             ]
             await asyncio.gather(*forward_tasks)
         except Exception as e:
@@ -105,6 +121,7 @@ class AsyncProxy:
                 os.unlink(cert_path)
             if key_path and os.path.exists(key_path):
                 os.unlink(key_path)
+<<<<<<< HEAD
                     
                     
     def _read_chunked_body(self, body: bytes):
@@ -237,6 +254,20 @@ class AsyncProxy:
 
         except Exception as e:
             logging.error(f"Error forwarding data ({direction}): {e}")
+=======
+
+    async def _forward_data(self, reader: asyncio.StreamReader, writer: asyncio.StreamWriter):
+        """Forward data between two streams."""
+        try:
+            while not reader.at_eof():
+                data = await reader.read(65536)
+                if not data:
+                    break
+                writer.write(data)
+                await writer.drain()
+        except Exception as e:
+            logging.error(f"Error forwarding data: {e}")
+>>>>>>> b2d7ad00ddfa5c124555eed2c4fb4f48826050f9
         finally:
             if writer:
                 writer.close()
@@ -245,9 +276,12 @@ class AsyncProxy:
                 except Exception:
                     pass
 
+<<<<<<< HEAD
 
 
 
+=======
+>>>>>>> b2d7ad00ddfa5c124555eed2c4fb4f48826050f9
     async def start(self):
         """Start the proxy server."""
         await self.initialize()
@@ -256,6 +290,7 @@ class AsyncProxy:
         logging.info(f"Proxy server running on {addr[0]}:{addr[1]}")
         async with server:
             await server.serve_forever()
+<<<<<<< HEAD
     
     
     def start_gui(self):
@@ -266,3 +301,5 @@ class AsyncProxy:
     def start_background(self):
         """Start the proxy server in a background thread (called by GUI button)."""
         threading.Thread(target=lambda: asyncio.run(self.start()), daemon=True).start()
+=======
+>>>>>>> b2d7ad00ddfa5c124555eed2c4fb4f48826050f9
