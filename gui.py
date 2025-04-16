@@ -59,7 +59,7 @@ class ProxyGUI(tk.Tk):
         print("Opening settings...")
 
     # ---------------------- Request Management ----------------------
-    def add_request(self, summary: str, full_text: str = ""):
+    def add_message(self, summary: str, full_text: str = ""):
         index = self.request_list.size()
         self.request_list.insert(tk.END, summary)
         self.request_data[index] = full_text
